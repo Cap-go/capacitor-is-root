@@ -27,7 +27,11 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "jailbreak",
+    "root",
+    "detection",
+    "security"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
