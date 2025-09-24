@@ -473,3 +473,7 @@ Extends the BusyBox detection with emulator heuristics (Android only).
 #### DeviceInfo
 
 </docgen-api>
+
+### Credits 
+
+This plugin was inspired by the work in https://github.com/WuglyakBolgoink/cordova-plugin-iroot
