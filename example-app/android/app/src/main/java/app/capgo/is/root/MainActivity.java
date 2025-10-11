@@ -1,4 +1,4 @@
-package com.example.plugin;
+package app.capgo.is.root;
 
 import com.getcapacitor.BridgeActivity;
 

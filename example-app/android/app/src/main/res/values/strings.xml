@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Root Detection Example</string>
-    <string name="title_activity_main">Root Detection Example</string>
+    <string name="app_name">Is Root Example</string>
+    <string name="title_activity_main">Is Root Example</string>
     <string name="package_name">app.capgo.is.root</string>
     <string name="custom_url_scheme">app.capgo.is.root</string>
 </resources>

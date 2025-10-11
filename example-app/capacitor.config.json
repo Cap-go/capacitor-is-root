@@ -1,6 +1,6 @@
 {
   "appId": "app.capgo.is.root",
-  "appName": "Root Detection Example",
+  "appName": "Is Root Example",
   "webDir": "dist",
   "plugins": {
     "SplashScreen": {
