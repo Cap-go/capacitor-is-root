@@ -168,7 +168,7 @@ import MachO
         #else
         return false
         #endif
-   }
+    }
 
     private func hasSuspiciousSymbolicLinks() -> Bool {
         for path in symbolicLinkCandidates {

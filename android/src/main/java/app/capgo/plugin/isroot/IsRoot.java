@@ -1,10 +1,8 @@
 package app.capgo.plugin.isroot;
 
 import android.content.Context;
-
 import com.getcapacitor.Logger;
 import com.scottyab.rootbeer.RootBeer;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -113,4 +111,3 @@ public class IsRoot {
         return internalRootDetection.togetDeviceInfo();
     }
 }
-

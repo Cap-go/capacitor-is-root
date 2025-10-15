@@ -1,9 +1,7 @@
 package app.capgo.plugin.isroot;
 
 import android.os.Build;
-
 import com.getcapacitor.Logger;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
@@ -53,4 +51,3 @@ public final class Utils {
         Logger.debug(Constants.LOG_TAG, String.format("Host: %s", Build.HOST));
     }
 }
-
