@@ -1,6 +1,6 @@
 {
   "name": "@capgo/capacitor-is-root",
-  "version": "7.0.9",
+  "version": "7.0.10",
   "description": "Jailbreak/Root Detection Plugin for Capacitor",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
