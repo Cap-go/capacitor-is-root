@@ -50,6 +50,7 @@ npx cap sync
 * [`togetDeviceInfo()`](#togetdeviceinfo)
 * [`isRootedWithEmulator()`](#isrootedwithemulator)
 * [`isRootedWithBusyBoxWithEmulator()`](#isrootedwithbusyboxwithemulator)
+* [`getPluginVersion()`](#getpluginversion)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -456,6 +457,19 @@ isRootedWithBusyBoxWithEmulator() => Promise<DetectionResult>
 Extends the BusyBox detection with emulator heuristics (Android only).
 
 **Returns:** <code>Promise&lt;<a href="#detectionresult">DetectionResult</a>&gt;</code>
+
+--------------------
+
+
+### getPluginVersion()
+
+```typescript
+getPluginVersion() => Promise<{ version: string; }>
+```
+
+Get the native Capacitor plugin version
+
+**Returns:** <code>Promise&lt;{ version: string; }&gt;</code>
 
 --------------------
 
