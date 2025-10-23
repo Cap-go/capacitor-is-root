@@ -134,4 +134,8 @@ export class IsRootWeb extends WebPlugin implements IsRootPlugin {
   async isRootedWithBusyBoxWithEmulator(): Promise<DetectionResult> {
     return this.resolved(false);
   }
+
+  async getPluginVersion(): Promise<{ version: string }> {
+    return { version: 'web' };
+  }
 }

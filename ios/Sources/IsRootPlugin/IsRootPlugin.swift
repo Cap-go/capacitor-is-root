@@ -6,6 +6,7 @@ import UIKit
 
 @objc(IsRootPlugin)
 public class IsRootPlugin: CAPPlugin, CAPBridgedPlugin {
+    private let PLUGIN_VERSION: String = ""
     public let identifier = "IsRootPlugin"
     public let jsName = "IsRoot"
     public let pluginMethods: [CAPPluginMethod] = [
@@ -39,7 +40,8 @@ public class IsRootPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "checkGoogleSDK", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "togetDeviceInfo", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "isRootedWithEmulator", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "isRootedWithBusyBoxWithEmulator", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "isRootedWithBusyBoxWithEmulator", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getPluginVersion", returnType: CAPPluginReturnPromise)
     ]
 
     private let detector = IsRoot()
@@ -191,4 +193,9 @@ public class IsRootPlugin: CAPPlugin, CAPBridgedPlugin {
     private func resolve(_ call: CAPPluginCall, value: Bool) {
         call.resolve(["result": value])
     }
+
+    @objc func getPluginVersion(_ call: CAPPluginCall) {
+        call.resolve(["version": self.PLUGIN_VERSION])
+    }
+
 }
