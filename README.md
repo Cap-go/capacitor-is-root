@@ -8,6 +8,10 @@
 
 Jailbreak/Root Detection Plugin for Capacitor
 
+## Documentation
+
+The most complete doc is available here: https://capgo.app/docs/plugins/is-root/
+
 ## Install
 
 ```bash
