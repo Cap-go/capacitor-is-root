@@ -62,6 +62,14 @@ npx cap sync
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
+Capacitor Is Root Plugin for detecting rooted (Android) or jailbroken (iOS) devices.
+
+This plugin provides comprehensive detection methods to identify if a device has been
+rooted or jailbroken, which can be important for security-sensitive applications.
+
+Most methods are Android-only and use various heuristics to detect root access.
+The basic `isRooted()` method works on both Android and iOS.
+
 ### isRooted()
 
 ```typescript
@@ -70,7 +78,13 @@ isRooted() => Promise<DetectionResult>
 
 Performs the default root/jailbreak detection checks.
 
+This is the recommended method for basic root/jailbreak detection.
+It runs a combination of the most reliable detection heuristics for the platform.
+Works on both Android and iOS.
+
 **Returns:** <code>Promise&lt;<a href="#detectionresult">DetectionResult</a>&gt;</code>
+
+**Since:** 1.0.0
 
 --------------------
 
@@ -434,7 +448,13 @@ togetDeviceInfo() => Promise<DeviceInfo>
 
 Returns device information collected during detection.
 
+Provides additional context and metadata about the device that was
+gathered during the root detection process. Useful for debugging
+and logging purposes.
+
 **Returns:** <code>Promise&lt;<a href="#deviceinfo">DeviceInfo</a>&gt;</code>
+
+**Since:** 1.0.0
 
 --------------------
 
@@ -471,9 +491,11 @@ Extends the BusyBox detection with emulator heuristics (Android only).
 getPluginVersion() => Promise<{ version: string; }>
 ```
 
-Get the native Capacitor plugin version
+Get the native Capacitor plugin version.
 
 **Returns:** <code>Promise&lt;{ version: string; }&gt;</code>
+
+**Since:** 1.0.0
 
 --------------------
 
@@ -483,12 +505,16 @@ Get the native Capacitor plugin version
 
 #### DetectionResult
 
-| Prop         | Type                 | Description                                                            |
-| ------------ | -------------------- | ---------------------------------------------------------------------- |
-| **`result`** | <code>boolean</code> | `true` when the associated heuristic detects root/jailbreak artifacts. |
+Result returned by root/jailbreak detection methods.
+
+| Prop         | Type                 | Description                                                                                                                 | Since |
+| ------------ | -------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`result`** | <code>boolean</code> | `true` when the associated heuristic detects root/jailbreak artifacts. `false` when no root/jailbreak indicators are found. | 1.0.0 |
 
 
 #### DeviceInfo
+
+Device information collected during detection.
 
 </docgen-api>
 

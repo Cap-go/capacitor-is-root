@@ -1,22 +1,64 @@
+/**
+ * Result returned by root/jailbreak detection methods.
+ *
+ * @since 1.0.0
+ */
 export interface DetectionResult {
   /**
    * `true` when the associated heuristic detects root/jailbreak artifacts.
+   * `false` when no root/jailbreak indicators are found.
+   *
+   * @since 1.0.0
    */
   result: boolean;
 }
 
+/**
+ * Device information collected during detection.
+ *
+ * @since 1.0.0
+ */
 export interface DeviceInfo {
   /**
    * Arbitrary key/value device metadata populated by the native implementation.
+   * Contents vary by platform and detection methods used.
+   *
+   * @since 1.0.0
    */
   [key: string]: any;
 }
 
+/**
+ * Capacitor Is Root Plugin for detecting rooted (Android) or jailbroken (iOS) devices.
+ *
+ * This plugin provides comprehensive detection methods to identify if a device has been
+ * rooted or jailbroken, which can be important for security-sensitive applications.
+ *
+ * Most methods are Android-only and use various heuristics to detect root access.
+ * The basic `isRooted()` method works on both Android and iOS.
+ *
+ * @since 1.0.0
+ */
 export interface IsRootPlugin {
   /**
    * Performs the default root/jailbreak detection checks.
    *
-   * @returns DetectionResult
+   * This is the recommended method for basic root/jailbreak detection.
+   * It runs a combination of the most reliable detection heuristics for the platform.
+   * Works on both Android and iOS.
+   *
+   * @returns Promise that resolves with the detection result
+   * @throws Error if the detection check fails
+   * @since 1.0.0
+   * @example
+   * ```typescript
+   * const { result } = await IsRoot.isRooted();
+   * if (result) {
+   *   console.log('Device is rooted/jailbroken');
+   * } else {
+   *   console.log('Device is not rooted/jailbroken');
+   * }
+   * ```
    */
   isRooted(): Promise<DetectionResult>;
 
@@ -211,6 +253,19 @@ export interface IsRootPlugin {
 
   /**
    * Returns device information collected during detection.
+   *
+   * Provides additional context and metadata about the device that was
+   * gathered during the root detection process. Useful for debugging
+   * and logging purposes.
+   *
+   * @returns Promise that resolves with device information
+   * @throws Error if getting device info fails
+   * @since 1.0.0
+   * @example
+   * ```typescript
+   * const deviceInfo = await IsRoot.togetDeviceInfo();
+   * console.log('Device info:', deviceInfo);
+   * ```
    */
   togetDeviceInfo(): Promise<DeviceInfo>;
 
@@ -229,10 +284,16 @@ export interface IsRootPlugin {
   isRootedWithBusyBoxWithEmulator(): Promise<DetectionResult>;
 
   /**
-   * Get the native Capacitor plugin version
+   * Get the native Capacitor plugin version.
    *
-   * @returns {Promise<{ id: string }>} an Promise with version for this device
-   * @throws An error if the something went wrong
+   * @returns Promise that resolves with the plugin version
+   * @throws Error if getting the version fails
+   * @since 1.0.0
+   * @example
+   * ```typescript
+   * const { version } = await IsRoot.getPluginVersion();
+   * console.log('Plugin version:', version);
+   * ```
    */
   getPluginVersion(): Promise<{ version: string }>;
 }
