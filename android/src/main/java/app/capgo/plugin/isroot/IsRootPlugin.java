@@ -12,7 +12,7 @@ import org.json.JSONObject;
 @CapacitorPlugin(name = "IsRoot")
 public class IsRootPlugin extends Plugin {
 
-    private final String pluginVersion = "7.0.12";
+    private final String pluginVersion = "8.1.0";
 
     private final IsRoot implementation = new IsRoot();
 
