@@ -6,7 +6,7 @@ import UIKit
 
 @objc(IsRootPlugin)
 public class IsRootPlugin: CAPPlugin, CAPBridgedPlugin {
-    private let pluginVersion: String = "8.1.6"
+    private let pluginVersion: String = "8.1.7"
     public let identifier = "IsRootPlugin"
     public let jsName = "IsRoot"
     public let pluginMethods: [CAPPluginMethod] = [
