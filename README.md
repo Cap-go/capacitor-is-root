@@ -96,7 +96,7 @@ Works on both Android and iOS.
 Example:
 
 ```ts
-import { IsRoot } from 'capacitor-is-root';
+import { IsRoot } from '@capgo/capacitor-is-root';
 
 const rootResult = await IsRoot.isRooted();
 if (rootResult.result) {
