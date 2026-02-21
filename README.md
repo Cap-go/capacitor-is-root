@@ -93,6 +93,19 @@ This is the recommended method for basic root/jailbreak detection.
 It runs a combination of the most reliable detection heuristics for the platform.
 Works on both Android and iOS.
 
+Example:
+
+```ts
+import { IsRoot } from '@capgo/capacitor-is-root';
+
+const rootResult = await IsRoot.isRooted();
+if (rootResult.result) {
+  console.log('Device is rooted');
+}
+```
+
+> `DetectionResult` uses the `result` field (`boolean`).
+
 **Returns:** <code>Promise&lt;<a href="#detectionresult">DetectionResult</a>&gt;</code>
 
 **Since:** 1.0.0
