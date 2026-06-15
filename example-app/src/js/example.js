@@ -1,3 +1,5 @@
+import { CapacitorUpdater } from '@capgo/capacitor-updater';
+import { Capacitor } from '@capacitor/core';
 import { IsRoot } from '@capgo/capacitor-is-root';
 
 const checks = [
@@ -135,3 +137,9 @@ runAllButton?.addEventListener('click', async () => {
 });
 
 populateSelect();
+
+if (Capacitor.isNativePlatform()) {
+  CapacitorUpdater.notifyAppReady().catch((error) => {
+    console.error('Capgo notifyAppReady failed', error);
+  });
+}
