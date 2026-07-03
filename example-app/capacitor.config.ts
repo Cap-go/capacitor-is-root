@@ -4,7 +4,7 @@ import pkg from './package.json';
 
 const config: CapacitorConfig = {
   appId: 'app.capgo.is.root',
-  appName: 'Is Root Example',
+  appName: '@capgo/capacitor-is-root',
   webDir: 'dist',
   plugins: {
     SplashScreen: {
