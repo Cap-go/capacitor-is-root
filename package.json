@@ -1,7 +1,7 @@
 {
   "name": "@capgo/capacitor-is-root",
   "version": "8.1.19",
-  "description": "Jailbreak/Root Detection Plugin for Capacitor",
+  "description": "Capacitor plugin to detect Android root, iOS jailbreak, and emulator (when requested)",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
