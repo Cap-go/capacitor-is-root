@@ -128,6 +128,7 @@ import MachO
         "cynject"
     ]
 
+    /// Returns `true` when the device looks jailbroken. Always `false` on the simulator.
     @objc public func isRooted() -> Bool {
         #if targetEnvironment(simulator)
         return false
@@ -160,6 +161,7 @@ import MachO
         return false
     }
 
+    /// Looks for the files installed by rootful and rootless jailbreaks.
     private func hasSuspiciousFiles() -> Bool {
         for path in suspiciousPaths {
             if fileManager.fileExists(atPath: path) {
@@ -169,6 +171,7 @@ import MachO
         return false
     }
 
+    /// Tries to open the jailbreak files directly, in case `FileManager` is hooked to hide them.
     private func canReadRestrictedFiles() -> Bool {
         for path in suspiciousPaths {
             if let file = fopen(path, "r") {
@@ -192,6 +195,8 @@ import MachO
         return false
     }
 
+    /// Checks whether a jailbreak package manager is installed, through its URL scheme.
+    /// iOS only answers for the schemes declared in `LSApplicationQueriesSchemes`; the others are ignored.
     private func canOpenJailbreakURL() -> Bool {
         #if canImport(UIKit)
         var result = false
@@ -215,6 +220,7 @@ import MachO
         #endif
     }
 
+    /// Detects the symbolic links created by jailbreaks. `lstat` sees them even when the target is unreadable.
     private func hasSuspiciousSymbolicLinks() -> Bool {
         for path in symbolicLinkCandidates {
             var statInfo = stat()
@@ -225,6 +231,7 @@ import MachO
         return false
     }
 
+    /// Adds up the weak indicators. A score of 3 or more is treated as a jailbreak by `isRooted()`.
     private func aggregatedDetectionScore() -> Int {
         var score = 0
 
@@ -244,6 +251,7 @@ import MachO
         return score
     }
 
+    /// Score contribution of the jailbreak URL schemes.
     private func urlCheck() -> Bool {
         return canOpenJailbreakURL()
     }
@@ -326,6 +334,7 @@ import MachO
         return result
     }
 
+    /// Looks for instrumentation and tweak injection libraries among the images loaded in the process.
     private func hasInjectedLibrary() -> Bool {
         let imageCount = _dyld_image_count()
         for index in 0..<imageCount {
