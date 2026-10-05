@@ -42,7 +42,23 @@ import MachO
         "/Applications/blackra1n.app",
         "/usr/bin/frida-server",
         "/usr/local/bin/cycript",
-        "/usr/lib/libcycript.dylib"
+        "/usr/lib/libcycript.dylib",
+        // Rootless jailbreaks (Dopamine, palera1n, XinaA15) install everything under /var/jb
+        "/var/jb",
+        "/var/binpack",
+        "/cores/binpack",
+        // Bootstrap markers left by unc0ver, Electra and the Procursus bootstrap
+        "/.installed_unc0ver",
+        "/.bootstrapped_electra",
+        "/.procursus_strapped",
+        // Package managers and tools that replaced Cydia
+        "/Applications/Sileo.app",
+        "/Applications/Zebra.app",
+        "/Applications/Filza.app",
+        // Tweak injection libraries that replaced MobileSubstrate
+        "/usr/lib/libsubstitute.dylib",
+        "/usr/lib/libhooker.dylib",
+        "/usr/lib/TweakInject"
     ]
 
     private let hiddenFiles: [String] = [
@@ -79,12 +95,37 @@ import MachO
 
     private let symbolicLinkCandidates: [String] = [
         "/Applications",
+        "/var/jb",
         "/var/stash/Library/Ringtones",
         "/var/stash/Library/Wallpaper",
         "/var/stash/usr/include",
         "/var/stash/usr/libexec",
         "/var/stash/usr/share",
         "/var/stash/usr/arm-apple-darwin9"
+    ]
+
+    // Each scheme is only reported by iOS when it is declared in LSApplicationQueriesSchemes
+    private let jailbreakURLSchemes: [String] = [
+        "cydia://package/com.example.package",
+        "sileo://",
+        "zbra://",
+        "filza://"
+    ]
+
+    // Lower-case fragments of the image names loaded by instrumentation and tweak injection tools
+    private let injectedLibraryIndicators: [String] = [
+        "fridagadget",
+        "frida-agent",
+        "mobilesubstrate",
+        "cydiasubstrate",
+        "libsubstitute",
+        "libhooker",
+        "ellekit",
+        "tweakinject",
+        "sslkillswitch",
+        "systemhook.dylib",
+        "libcycript",
+        "cynject"
     ]
 
     @objc public func isRooted() -> Bool {
@@ -104,7 +145,7 @@ import MachO
             return true
         }
 
-        if canOpenCydiaURL() {
+        if canOpenJailbreakURL() {
             return true
         }
 
@@ -151,12 +192,16 @@ import MachO
         return false
     }
 
-    private func canOpenCydiaURL() -> Bool {
+    private func canOpenJailbreakURL() -> Bool {
         #if canImport(UIKit)
         var result = false
+        let schemes = jailbreakURLSchemes
         let block = {
-            if let url = URL(string: "cydia://package/com.example.package"), UIApplication.shared.canOpenURL(url) {
-                result = true
+            for scheme in schemes {
+                if let url = URL(string: scheme), UIApplication.shared.canOpenURL(url) {
+                    result = true
+                    return
+                }
             }
         }
         if Thread.isMainThread {
@@ -193,14 +238,14 @@ import MachO
         if filesExistCheck() { score += 2 }
         if checkFork() { score += 2 }
         if isFridaRunning() { score += 2 }
-        if isFridaInjected() { score += 2 }
+        if hasInjectedLibrary() { score += 2 }
         if isDebugged() { score += 2 }
 
         return score
     }
 
     private func urlCheck() -> Bool {
-        return canOpenCydiaURL()
+        return canOpenJailbreakURL()
     }
 
     private func cydiaCheck() -> Bool {
@@ -281,12 +326,12 @@ import MachO
         return result
     }
 
-    private func isFridaInjected() -> Bool {
+    private func hasInjectedLibrary() -> Bool {
         let imageCount = _dyld_image_count()
         for index in 0..<imageCount {
             if let namePointer = _dyld_get_image_name(index) {
-                let name = String(cString: namePointer)
-                if name.contains("FridaGadget") {
+                let name = String(cString: namePointer).lowercased()
+                if injectedLibraryIndicators.contains(where: { name.contains($0) }) {
                     return true
                 }
             }
