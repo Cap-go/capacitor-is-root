@@ -1,12 +1,28 @@
 # @capgo/capacitor-is-root
-<a href="https://capgo.app/"><img src="https://capgo.app/readme-banner.svg?repo=Cap-go/capacitor-is-root" alt="Capgo - Instant updates for Capacitor" /></a>
+
+Detect rooted Android devices and jailbroken iPhones from your Capacitor app, so you can protect payments, content and accounts on compromised devices.
+
+<a href="https://capgo.app/?ref=plugin_is_root"><img src="https://capgo.app/readme-banner.svg?repo=Cap-go/capacitor-is-root" alt="Capgo - Instant updates for Capacitor" /></a>
 
 <div align="center">
-  <h2><a href="https://capgo.app/?ref=plugin_is_root"> ➡️ Get Instant updates for your App with Capgo</a></h2>
-  <h2><a href="https://capgo.app/consulting/?ref=plugin_is_root"> Missing a feature? We’ll build the plugin for you 💪</a></h2>
+  <p><b>Capgo</b>: open-source live updates for Ionic and Capacitor apps. Ship OTA fixes and features instantly, without waiting for app store review.</p>
+  <h2><a href="https://capgo.app/register/?ref=plugin_is_root">➡️ Get started for free</a></h2>
+  <p>14-day unlimited free trial. No credit card required</p>
+  <p><a href="https://capgo.app/consulting/?ref=plugin_is_root">Missing a feature? We'll build the plugin for you 💪</a></p>
 </div>
 
-Jailbreak/Root Detection Plugin for Capacitor
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Cap-go/capacitor-is-root/main/assets/github-social-preview.png" alt="@capgo/capacitor-is-root for Capacitor apps" width="300" />
+</p>
+
+## Key features
+
+- **One check**: `isRooted()` runs the default root or jailbreak checks on both platforms.
+- **iOS jailbreak checks**: looks for jailbreak files and tests writing outside the app sandbox.
+- **Android RootBeer checks**: `checkForSuBinary()`, `checkForDangerousProps()`, `checkForRWPaths()`, `detectTestKeys()` and more.
+- **App detection on Android**: `detectRootManagementApps()`, `detectPotentiallyDangerousApps()` and `detectRootCloakingApps()`.
+- **BusyBox aware**: `isRootedWithBusyBox()` adds BusyBox checks on Android.
+- **Platforms**: iOS and Android. Android uses RootBeer. Not meaningful on web.
 
 ## Documentation
 
