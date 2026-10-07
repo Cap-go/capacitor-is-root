@@ -46,7 +46,7 @@ npx cap sync
 
 ### Android package visibility (API 30+)
 
-When your app targets Android 11 (API 30) or higher, package filtering limits which other apps `PackageManager` can see unless they are declared in a `<queries>` element or match Android's automatic visibility rules (for example your own package, some system packages, and packages that handle intents your app queries). This plugin ships the `<queries>` entries needed for its RootBeer and internal installed-package checks, and the manifest merger adds them to your app. You do not need to duplicate those declarations unless you extend detection with your own package lookups.
+When your app targets Android 11 (API 30) or higher, package filtering limits which other apps `PackageManager` can see unless they are declared in a `<queries>` element or are automatically visible (for example your own package, apps that share your UID, and certain pre-installed system packages). This plugin ships the `<queries>` entries needed for its RootBeer and internal installed-package checks, and the manifest merger adds them to your app. You do not need to duplicate those declarations unless you extend detection with your own package lookups.
 
 `detectPotentiallyDangerousApps()` intentionally does not declare piracy-related packages (for example Lucky Patcher), so those apps are not treated as a root signal via package visibility alone.
 
