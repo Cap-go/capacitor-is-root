@@ -44,6 +44,12 @@ npm install @capgo/capacitor-is-root
 npx cap sync
 ```
 
+### Android package visibility (API 30+)
+
+On Android 11 and later, apps only see packages declared in a `<queries>` manifest element. This plugin ships the `<queries>` entries needed for its RootBeer and internal installed-package checks, and the manifest merger adds them to your app. You do not need to duplicate those declarations unless you extend detection with your own package lookups.
+
+`detectPotentiallyDangerousApps()` intentionally does not declare piracy-related packages (for example Lucky Patcher), so those apps are not treated as a root signal via package visibility alone.
+
 ## API
 
 <docgen-index>

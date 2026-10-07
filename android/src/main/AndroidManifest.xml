@@ -1,2 +1,42 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Android 11+ package visibility: merged into the app so installed-package root checks work. -->
+    <queries>
+        <!-- RootBeer: knownRootAppsPackages -->
+        <package android:name="com.noshufou.android.su" />
+        <package android:name="com.noshufou.android.su.elite" />
+        <package android:name="eu.chainfire.supersu" />
+        <package android:name="com.koushikdutta.superuser" />
+        <package android:name="com.thirdparty.superuser" />
+        <package android:name="com.yellowes.su" />
+        <package android:name="com.topjohnwu.magisk" />
+        <package android:name="com.kingroot.kinguser" />
+        <package android:name="com.kingo.root" />
+        <package android:name="com.smedialink.oneclickroot" />
+        <package android:name="com.zhiqupk.root.global" />
+        <package android:name="com.alephzain.framaroot" />
+        <!-- InternalRootDetection: BLACKLISTED_PACKAGES, ROOT_ONLY_APPLICATIONS, CYDIA_SUBSTRATE_PACKAGE -->
+        <package android:name="com.zachspong.temprootremovejb" />
+        <package android:name="com.ramdroid.appquarantine" />
+        <package android:name="com.saurik.substrate" />
+        <package android:name="eu.chainfire.stickmount" />
+        <package android:name="eu.chainfire.stickmount.pro" />
+        <package android:name="eu.chainfire.mobileodin.pro" />
+        <package android:name="eu.chainfire.liveboot" />
+        <package android:name="eu.chainfire.pryfi" />
+        <package android:name="eu.chainfire.adbd" />
+        <package android:name="eu.chainfire.recently" />
+        <package android:name="eu.chainfire.flash" />
+        <package android:name="eu.chainfire.triangleaway" />
+        <!-- RootBeer: knownRootCloakingPackages (detectRootCloakingApps) -->
+        <package android:name="com.devadvance.rootcloak" />
+        <package android:name="com.devadvance.rootcloakplus" />
+        <package android:name="de.robv.android.xposed.installer" />
+        <package android:name="com.amphoras.hidemyroot" />
+        <package android:name="com.amphoras.hidemyrootadfree" />
+        <package android:name="com.formyhm.hiderootPremium" />
+        <package android:name="com.formyhm.hideroot" />
+        <!-- RootBeer: EdXposed managers from knownDangerousAppsPackages (detectPotentiallyDangerousApps) -->
+        <package android:name="com.solohsu.android.edxp.manager" />
+        <package android:name="org.meowcat.edxposed.manager" />
+    </queries>
 </manifest>
