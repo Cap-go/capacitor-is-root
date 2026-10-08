@@ -60,6 +60,22 @@ npm install @capgo/capacitor-is-root
 npx cap sync
 ```
 
+## iOS
+
+No configuration is required. Optionally, the plugin can also detect a jailbreak through the URL schemes registered by the jailbreak package managers. iOS only answers for the schemes declared in your app, so add the ones you want to check to `Info.plist`:
+
+```xml
+<key>LSApplicationQueriesSchemes</key>
+<array>
+  <string>cydia</string>
+  <string>sileo</string>
+  <string>zbra</string>
+  <string>filza</string>
+</array>
+```
+
+Schemes that are not declared are ignored. The other checks (files of rootful and rootless jailbreaks, sandbox integrity, injected libraries) do not need this setting.
+
 ## API
 
 <docgen-index>
