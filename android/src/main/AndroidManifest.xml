@@ -27,6 +27,7 @@
         <package android:name="eu.chainfire.recently" />
         <package android:name="eu.chainfire.flash" />
         <package android:name="eu.chainfire.triangleaway" />
+        <!-- org.adblockplus.android (ROOT_ONLY_APPLICATIONS) is intentionally not declared: it is an ordinary app today, see issue #14. -->
         <!-- RootBeer: knownRootCloakingPackages (detectRootCloakingApps) -->
         <package android:name="com.devadvance.rootcloak" />
         <package android:name="com.devadvance.rootcloakplus" />

@@ -50,6 +50,8 @@ When your app targets Android 11 (API 30) or higher, package filtering limits wh
 
 `detectPotentiallyDangerousApps()` intentionally does not declare piracy-related packages (for example Lucky Patcher), so those apps are not treated as a root signal via package visibility alone.
 
+The internal installed-package check also leaves `org.adblockplus.android` undeclared, even though it is listed in `ROOT_ONLY_APPLICATIONS`. Adblock Plus is an ordinary app today, so making it visible would count it toward the root threshold on unrooted devices.
+
 ## API
 
 <docgen-index>
