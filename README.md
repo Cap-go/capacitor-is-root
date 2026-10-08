@@ -48,7 +48,7 @@ npx cap sync
 
 When your app targets Android 11 (API 30) or higher, package filtering limits which other apps `PackageManager` can see unless they are declared in a `<queries>` element or are automatically visible (for example your own package, apps that share your UID, and certain pre-installed system packages). This plugin ships the `<queries>` entries needed for its RootBeer and internal installed-package checks, and the manifest merger adds them to your app. You do not need to duplicate those declarations unless you extend detection with your own package lookups.
 
-`detectPotentiallyDangerousApps()` does not add `<queries>` entries for RootBeer's dangerous-apps list (ROM managers, app quarantine tools, and piracy apps). That keeps the manifest minimal for Play package-visibility policy, so those installs are not visible to that check unless the host app declares them.
+`detectPotentiallyDangerousApps()` does not add `<queries>` entries for the RootBeer dangerous-apps packages that this plugin omits (ROM managers and piracy apps). Those installs are not visible to that check unless the host app declares them. The plugin manifest already declares selected packages from that list where we want detection (for example `com.ramdroid.appquarantine` and the EdXposed managers).
 
 The internal installed-package check also leaves `org.adblockplus.android` undeclared, even though it is listed in `ROOT_ONLY_APPLICATIONS`. Adblock Plus is an ordinary app today, so making it visible would count it toward the root threshold on unrooted devices.
 
