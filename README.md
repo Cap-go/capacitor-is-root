@@ -2,7 +2,7 @@
 
 Detect rooted Android devices and jailbroken iPhones from your Capacitor app, so you can protect payments, content and accounts on compromised devices.
 
-<a href="https://capgo.app/?ref=plugin_is_root"><img src="https://capgo.app/readme-banner.svg?repo=Cap-go/capacitor-is-root" alt="Capgo - Instant updates for Capacitor" /></a>
+<a href="https://capgo.app/?ref=plugin_is_root"><img src="https://capgo.app/readme-banner.svg?repo=Cap-go/capacitor-is-root" alt="Capgo - Build Capacitor apps with AI, ship updates instantly" /></a>
 
 <div align="center">
   <p><b>Capgo</b>: push fixes to your Capacitor users in minutes, build signed iOS and Android apps without a Mac, and roll back in one click.</p>
@@ -10,6 +10,8 @@ Detect rooted Android devices and jailbroken iPhones from your Capacitor app, so
   <p>14-day unlimited free trial. No credit card required</p>
   <p><a href="https://capgo.app/consulting/?ref=plugin_is_root">Missing a feature? We'll build the plugin for you 💪</a></p>
 </div>
+
+> 🤖 **Building with an AI coding agent?** Install [Capgo skills](https://capgo.app/skills/?ref=plugin_is_root) so Claude Code, Codex, Cursor, Copilot, or Gemini CLI know how to install and use `@capgo/capacitor-is-root` in your Capacitor app: `npx skills add Cap-go/capgo-skills`. Then ask your agent: *"Add @capgo/capacitor-is-root to my Capacitor app and wire it up."* [Agent setup guides](https://capgo.app/agents/?ref=plugin_is_root) · [Hosted MCP](https://capgo.app/docs/ai/mcp/?ref=plugin_is_root)
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Cap-go/capacitor-is-root/main/assets/github-social-preview.png" alt="@capgo/capacitor-is-root for Capacitor apps" width="300" />
