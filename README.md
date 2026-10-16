@@ -16,6 +16,8 @@ Detect rooted Android devices and jailbroken iPhones from your Capacitor app, so
   <img src="https://raw.githubusercontent.com/Cap-go/capacitor-is-root/main/assets/github-social-preview.png" alt="@capgo/capacitor-is-root for Capacitor apps" width="300" />
 </p>
 
+Detect **Android root**, **iOS jailbreak**, and **emulator environments** (when you opt in) from your Capacitor app. `@capgo/capacitor-is-root` exposes one cross-platform entry point plus granular Android checks so you can tune risk for banking, fintech, enterprise, and other security-sensitive products.
+
 ## Key features
 
 - **One check**: `isRooted()` runs the default root or jailbreak checks on both platforms.
@@ -25,9 +27,93 @@ Detect rooted Android devices and jailbroken iPhones from your Capacitor app, so
 - **BusyBox aware**: `isRootedWithBusyBox()` adds BusyBox checks on Android.
 - **Platforms**: iOS and Android. Android uses RootBeer. Not meaningful on web.
 
+## What it detects
+
+| Signal | Platforms | How to check |
+| ------ | --------- | ------------ |
+| Root / jailbreak | Android and iOS | `isRooted()` (recommended default) |
+| Emulator | Android only | `isRunningOnEmulator()`, `isRootedWithEmulator()`, `isRootedWithBusyBoxWithEmulator()`, or individual `simpleCheck*` / `check*` emulator helpers |
+| Deeper root signals | Android only | RootBeer-backed helpers and internal checks (see below) |
+
+On **iOS**, `isRooted()` is the supported cross-platform API. Simulator builds always report not jailbroken (`false`).
+
+On **Android**, most methods are Android-only. `isRooted()` combines [RootBeer](https://github.com/scottyab/rootbeer) heuristics with Capgo internal checks. Emulator detection is **not** part of default `isRooted()`; use `isRootedWithEmulator()` or `isRunningOnEmulator()` when you want that signal.
+
+## Why apps use it
+
+- **Reduce fraud and abuse** on compromised devices where attackers can hook APIs or bypass local controls.
+- **Support compliance and risk policies** that require knowing when a device is rooted, jailbroken, or running in an emulator.
+- **Gate sensitive flows** (payments, PII, high-value actions) with an explicit device-trust decision instead of assuming the OS sandbox is intact.
+
+Pair this plugin with server-side validation, certificate pinning, and your own threat model. It is a client-side signal, not a standalone security boundary.
+
+## What runs under the hood
+
+### iOS `isRooted()`
+
+Runs on physical devices only (simulator returns `false`). Checks run in order; any positive result returns jailbroken:
+
+1. Known jailbreak **paths and apps** (Cydia, MobileSubstrate, SSH, Frida, Cycript, and related paths).
+2. **Restricted file reads** (can open suspicious paths with `fopen`).
+3. **Writes outside the sandbox** (test writes under `/private/`).
+4. **`cydia://` URL** handling via `canOpenURL`.
+5. **Suspicious symbolic links** under `/Applications` and `/var/stash/...`.
+
+If none of the above trigger, an **aggregated score** runs (threshold **3**). Points come from URL/Cydia checks, hidden jailbreak files, bundle plist anomalies, suspicious processes (for example MobileCydia, Cydia, afpd), `/etc/fstab` size, symlink checks, missing executable path, Frida on port 27042, FridaGadget in loaded images, and debugger attachment (`P_TRACED`). A fork-based check is present but currently always returns false.
+
+### Android `isRooted()`
+
+Returns `true` if **either** RootBeer `isRooted()` **or** Capgo `InternalRootDetection.isRooted()` reports indicators:
+
+| Internal check | What it looks for |
+| -------------- | ----------------- |
+| `isExistBuildTags` | `ro.build.tags` contains `test-keys` |
+| `doesSuperuserApkExist` | Known superuser APK paths on disk |
+| `isExistSUPath` | `su` binary under common locations |
+| `checkDirPermissions` | Writable system dirs or readable `/data` |
+| `checkExecutingCommands` | `which su` style command execution |
+| `checkInstalledPackages` | Blacklisted packages, root-only apps, Cydia Substrate |
+| `checkforOverTheAirCertificates` | Missing `/etc/security/otacerts.zip` |
+
+**Emulator is not included** in default `isRooted()`. `isRootedWithEmulator()` adds `isRunningOnEmulator()` (model, board, manufacturer, fingerprint, and product heuristics for common emulators including Genymotion and Google SDK images).
+
+### Optional Android-only APIs
+
+Call these when you need finer-grained telemetry or custom policies (detection methods return `{ result: boolean }`):
+
+- **Combined:** `isRootedWithBusyBox()`, `isRootedWithBusyBoxWithEmulator()`
+- **RootBeer:** `detectRootManagementApps()`, `detectPotentiallyDangerousApps()`, `detectTestKeys()`, `checkForBusyBoxBinary()`, `checkForSuBinary()`, `checkSuExists()`, `checkForRWPaths()`, `checkForDangerousProps()`, `checkForRootNative()`, `detectRootCloakingApps()`, `isSelinuxFlagInEnabled()`
+- **Internal (exposed individually):** `isExistBuildTags()`, `doesSuperuserApkExist()`, `isExistSUPath()`, `checkDirPermissions()`, `checkExecutingCommands()`, `checkInstalledPackages()`, `checkforOverTheAirCertificates()`
+- **Emulator helpers:** `isRunningOnEmulator()`, `simpleCheckEmulator()`, `simpleCheckSDKBF86()`, `simpleCheckQRREFPH()`, `simpleCheckBuild()`, `checkGenymotion()`, `checkGeneric()`, `checkGoogleSDK()`
+- **Debug metadata:** `togetDeviceInfo()` returns build and OS fields collected on Android
+
+## Limits (read this)
+
+All detection is **heuristic**. Determined attackers on rooted or jailbroken devices can hide binaries, hook native code, or spoof results. **False positives and false negatives are possible.** Treat `result: true` as a risk signal for your app policy, not as proof of compromise, and never as a substitute for server-side authentication and authorization.
+
+## Quick usage
+
+```typescript
+import { IsRoot } from '@capgo/capacitor-is-root';
+
+// Cross-platform root / jailbreak check
+const { result } = await IsRoot.isRooted();
+if (result) {
+  console.warn('Device may be rooted or jailbroken');
+}
+
+// Android: include emulator in the same pass as root checks
+const emulatorAware = await IsRoot.isRootedWithEmulator();
+
+// Android: emulator only
+const { result: onEmulator } = await IsRoot.isRunningOnEmulator();
+```
+
+Full API reference is generated below from `src/definitions.ts`.
+
 ## Documentation
 
-The most complete doc is available here: https://capgo.app/docs/plugins/is-root/
+The most complete doc is available here: [capgo.app/docs/plugins/is-root/](https://capgo.app/docs/plugins/is-root/)
 
 ## Compatibility
 
