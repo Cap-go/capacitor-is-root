@@ -1,12 +1,29 @@
 # @capgo/capacitor-is-root
-<a href="https://capgo.app/"><img src="https://capgo.app/readme-banner.svg?repo=Cap-go/capacitor-is-root" alt="Capgo - Instant updates for Capacitor" /></a>
+
+Detect rooted Android devices and jailbroken iPhones from your Capacitor app, so you can protect payments, content and accounts on compromised devices.
+
+<a href="https://capgo.app/?ref=plugin_is_root"><img src="https://capgo.app/readme-banner.svg?repo=Cap-go/capacitor-is-root" alt="Capgo - Build Capacitor apps with AI, ship updates instantly" /></a>
 
 <div align="center">
-  <h2><a href="https://capgo.app/?ref=plugin_is_root"> ➡️ Get Instant updates for your App with Capgo</a></h2>
-  <h2><a href="https://capgo.app/consulting/?ref=plugin_is_root"> Missing a feature? We’ll build the plugin for you 💪</a></h2>
+  <p><b>Capgo</b>: push fixes to your Capacitor users in minutes, build signed iOS and Android apps without a Mac, and roll back in one click.</p>
+  <h2><a href="https://capgo.app/register/?ref=plugin_is_root">➡️ Get started for free</a></h2>
+  <p>14-day unlimited free trial. No credit card required</p>
 </div>
 
-Jailbreak/Root Detection Plugin for Capacitor
+> 🤖 **Building with an AI coding agent?** Install [Capgo skills](https://capgo.app/skills/?ref=plugin_is_root) so Claude Code, Codex, Cursor, Copilot, or Gemini CLI know how to install and use `@capgo/capacitor-is-root` in your Capacitor app: `npx skills add Cap-go/capgo-skills`. Then ask your agent: *"Add @capgo/capacitor-is-root to my Capacitor app and wire it up."* [Agent setup guides](https://capgo.app/agents/?ref=plugin_is_root) · [Hosted MCP](https://capgo.app/docs/ai/mcp/?ref=plugin_is_root)
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Cap-go/capacitor-is-root/main/assets/github-social-preview.png" alt="@capgo/capacitor-is-root for Capacitor apps" width="300" />
+</p>
+
+## Key features
+
+- **One check**: `isRooted()` runs the default root or jailbreak checks on both platforms.
+- **iOS jailbreak checks**: looks for jailbreak files and tests writing outside the app sandbox.
+- **Android RootBeer checks**: `checkForSuBinary()`, `checkForDangerousProps()`, `checkForRWPaths()`, `detectTestKeys()` and more.
+- **App detection on Android**: `detectRootManagementApps()`, `detectPotentiallyDangerousApps()` and `detectRootCloakingApps()`.
+- **BusyBox aware**: `isRootedWithBusyBox()` adds BusyBox checks on Android.
+- **Platforms**: iOS and Android. Android uses RootBeer. Not meaningful on web.
 
 ## Documentation
 
@@ -51,6 +68,22 @@ When your app targets Android 11 (API 30) or higher, package filtering limits wh
 `detectPotentiallyDangerousApps()` does not add `<queries>` entries for the RootBeer dangerous-apps packages that this plugin omits (ROM managers and piracy apps). Those installs are not visible to that check unless the host app declares them. The plugin manifest already declares selected packages from that list where we want detection (for example `com.ramdroid.appquarantine` and the EdXposed managers).
 
 The internal installed-package check also leaves `org.adblockplus.android` undeclared, even though it is listed in `ROOT_ONLY_APPLICATIONS`. Adblock Plus is an ordinary app today, so making it visible would count it toward the root threshold on unrooted devices.
+
+## iOS
+
+No configuration is required. Optionally, the plugin can also detect a jailbreak through the URL schemes registered by the jailbreak package managers. iOS only answers for the schemes declared in your app, so add the ones you want to check to `Info.plist`:
+
+```xml
+<key>LSApplicationQueriesSchemes</key>
+<array>
+  <string>cydia</string>
+  <string>sileo</string>
+  <string>zbra</string>
+  <string>filza</string>
+</array>
+```
+
+Schemes that are not declared are ignored. The other checks (files of rootful and rootless jailbreaks, sandbox integrity, injected libraries) do not need this setting.
 
 ## API
 

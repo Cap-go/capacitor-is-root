@@ -42,7 +42,23 @@ import MachO
         "/Applications/blackra1n.app",
         "/usr/bin/frida-server",
         "/usr/local/bin/cycript",
-        "/usr/lib/libcycript.dylib"
+        "/usr/lib/libcycript.dylib",
+        // Rootless jailbreaks (Dopamine, palera1n, XinaA15) install everything under /var/jb
+        "/var/jb",
+        "/var/binpack",
+        "/cores/binpack",
+        // Bootstrap markers left by unc0ver, Electra and the Procursus bootstrap
+        "/.installed_unc0ver",
+        "/.bootstrapped_electra",
+        "/.procursus_strapped",
+        // Package managers and tools that replaced Cydia
+        "/Applications/Sileo.app",
+        "/Applications/Zebra.app",
+        "/Applications/Filza.app",
+        // Tweak injection libraries that replaced MobileSubstrate
+        "/usr/lib/libsubstitute.dylib",
+        "/usr/lib/libhooker.dylib",
+        "/usr/lib/TweakInject"
     ]
 
     private let hiddenFiles: [String] = [
@@ -79,6 +95,7 @@ import MachO
 
     private let symbolicLinkCandidates: [String] = [
         "/Applications",
+        "/var/jb",
         "/var/stash/Library/Ringtones",
         "/var/stash/Library/Wallpaper",
         "/var/stash/usr/include",
@@ -87,6 +104,31 @@ import MachO
         "/var/stash/usr/arm-apple-darwin9"
     ]
 
+    // Each scheme is only reported by iOS when it is declared in LSApplicationQueriesSchemes
+    private let jailbreakURLSchemes: [String] = [
+        "cydia://package/com.example.package",
+        "sileo://",
+        "zbra://",
+        "filza://"
+    ]
+
+    // Lower-case fragments of the image names loaded by instrumentation and tweak injection tools
+    private let injectedLibraryIndicators: [String] = [
+        "fridagadget",
+        "frida-agent",
+        "mobilesubstrate",
+        "cydiasubstrate",
+        "libsubstitute",
+        "libhooker",
+        "ellekit",
+        "tweakinject",
+        "sslkillswitch",
+        "systemhook.dylib",
+        "libcycript",
+        "cynject"
+    ]
+
+    /// Returns `true` when the device looks jailbroken. Always `false` on the simulator.
     @objc public func isRooted() -> Bool {
         #if targetEnvironment(simulator)
         return false
@@ -104,7 +146,7 @@ import MachO
             return true
         }
 
-        if canOpenCydiaURL() {
+        if canOpenJailbreakURL() {
             return true
         }
 
@@ -119,6 +161,7 @@ import MachO
         return false
     }
 
+    /// Looks for the files installed by rootful and rootless jailbreaks.
     private func hasSuspiciousFiles() -> Bool {
         for path in suspiciousPaths {
             if fileManager.fileExists(atPath: path) {
@@ -128,6 +171,7 @@ import MachO
         return false
     }
 
+    /// Tries to open the jailbreak files directly, in case `FileManager` is hooked to hide them.
     private func canReadRestrictedFiles() -> Bool {
         for path in suspiciousPaths {
             if let file = fopen(path, "r") {
@@ -151,12 +195,18 @@ import MachO
         return false
     }
 
-    private func canOpenCydiaURL() -> Bool {
+    /// Checks whether a jailbreak package manager is installed, through its URL scheme.
+    /// iOS only answers for the schemes declared in `LSApplicationQueriesSchemes`; the others are ignored.
+    private func canOpenJailbreakURL() -> Bool {
         #if canImport(UIKit)
         var result = false
+        let schemes = jailbreakURLSchemes
         let block = {
-            if let url = URL(string: "cydia://package/com.example.package"), UIApplication.shared.canOpenURL(url) {
-                result = true
+            for scheme in schemes {
+                if let url = URL(string: scheme), UIApplication.shared.canOpenURL(url) {
+                    result = true
+                    return
+                }
             }
         }
         if Thread.isMainThread {
@@ -170,6 +220,7 @@ import MachO
         #endif
     }
 
+    /// Detects the symbolic links created by jailbreaks. `lstat` sees them even when the target is unreadable.
     private func hasSuspiciousSymbolicLinks() -> Bool {
         for path in symbolicLinkCandidates {
             var statInfo = stat()
@@ -180,6 +231,7 @@ import MachO
         return false
     }
 
+    /// Adds up the weak indicators. A score of 3 or more is treated as a jailbreak by `isRooted()`.
     private func aggregatedDetectionScore() -> Int {
         var score = 0
 
@@ -193,14 +245,15 @@ import MachO
         if filesExistCheck() { score += 2 }
         if checkFork() { score += 2 }
         if isFridaRunning() { score += 2 }
-        if isFridaInjected() { score += 2 }
+        if hasInjectedLibrary() { score += 2 }
         if isDebugged() { score += 2 }
 
         return score
     }
 
+    /// Score contribution of the jailbreak URL schemes.
     private func urlCheck() -> Bool {
-        return canOpenCydiaURL()
+        return canOpenJailbreakURL()
     }
 
     private func cydiaCheck() -> Bool {
@@ -281,12 +334,13 @@ import MachO
         return result
     }
 
-    private func isFridaInjected() -> Bool {
+    /// Looks for instrumentation and tweak injection libraries among the images loaded in the process.
+    private func hasInjectedLibrary() -> Bool {
         let imageCount = _dyld_image_count()
         for index in 0..<imageCount {
             if let namePointer = _dyld_get_image_name(index) {
-                let name = String(cString: namePointer)
-                if name.contains("FridaGadget") {
+                let name = String(cString: namePointer).lowercased()
+                if injectedLibraryIndicators.contains(where: { name.contains($0) }) {
                     return true
                 }
             }
