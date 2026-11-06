@@ -46,6 +46,16 @@ case "$platform" in
     bunx cap sync android
     cd android
     ./gradlew build test
+    ./gradlew :app:assembleRelease
+    mapping_file="app/build/outputs/mapping/release/mapping.txt"
+    if [ ! -f "$mapping_file" ]; then
+      echo "Expected R8 mapping at $mapping_file after assembleRelease"
+      exit 1
+    fi
+    if ! grep -q 'app\.capgo\.plugin\.isroot\.IsRootPlugin' "$mapping_file"; then
+      echo "IsRootPlugin missing from $mapping_file (R8 may have stripped the plugin)"
+      exit 1
+    fi
     ;;
   ios)
     if [ ! -d ios ]; then
