@@ -1,6 +1,11 @@
 # Consumer rules for apps that minify with R8 (Capacitor 9+). Applied via consumerProguardFiles in build.gradle.
 
 # Capacitor loads plugin classes with Class.forName and indexes @PluginMethod entry points at runtime (PluginHandle).
+# Keep annotation metadata Capacitor reads through PluginHandle reflection.
+-keepattributes RuntimeVisibleAnnotations
+-keep @interface com.getcapacitor.annotation.** { *; }
+-keep @interface com.getcapacitor.PluginMethod { *; }
+
 -keep class app.capgo.plugin.isroot.IsRootPlugin extends com.getcapacitor.Plugin {
     public <init>();
 }
